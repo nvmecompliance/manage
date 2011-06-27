@@ -1,0 +1,5 @@
+*.iso
+*.img
+*.rpm
+*.log
+.~lock.readme.start.odt#
