@@ -18,9 +18,10 @@ if [ -z $vdisk ]; then
 fi
 
 if [ -z $isofile ]; then
-	../qemu/x86_64-softmmu/qemu-system-x86_64 -m 2048 -hda ./vdisk/${vdisk} -device nvme
+	# sudo needed because kvm module requires higher priveledged user
+	sudo ../qemu/x86_64-softmmu/qemu-system-x86_64 -m 1024 -hda ./vdisk/${vdisk} -device nvme --enable-kvm -smp 2
 else
-	../qemu/x86_64-softmmu/qemu-system-x86_64 -m 2048 -cdrom ./vkernel/${isofile} -hda ./vdisk/${vdisk} -device nvme
+	../qemu/x86_64-softmmu/qemu-system-x86_64 -m 1024 -cdrom ./vkernel/${isofile} -hda ./vdisk/${vdisk} -device nvme
 fi
 
 exit
