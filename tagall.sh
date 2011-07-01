@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tagrel=$1
-msg=$2
+msg=\"$2\"
 
 Usage() {
 echo "usage...."
