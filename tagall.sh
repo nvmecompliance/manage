@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tagrel=$1
-msg=\"$2\"
+msg=$2
 
 Usage() {
 echo "usage...."
@@ -21,12 +21,13 @@ fi
 tagname=compliance_rel=${tagrel}
 
 cd ../qemu
-git tag -a -m ${msg} ${tagname}
+git tag -a -m "${msg}" ${tagname}
 cd ../tnvme
-git tag -a -m ${msg} ${tagname}
+git tag -a -m "${msg}" ${tagname}
 cd ../dnvme
-git tag -a -m ${msg} ${tagname}
+git tag -a -m "${msg}" ${tagname}
 cd ../manage
-git tag -a -m ${msg} ${tagname}
+git tag -a -m "${msg}" ${tagname}
 
+git tag -l -n1
 exit
