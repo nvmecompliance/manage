@@ -547,7 +547,7 @@ defaulted to 0
 	NAME = "PXID"
 	OFFSET = 0x00
 	LENGTH = 0x02
-	VALUE = 0xaa10
+	VALUE = 0x0010
 	RO_MASK = 0xFFFF
 	RW_MASK = 0x0
 	RWC_MASK = 0x0
