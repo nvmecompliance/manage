@@ -1,4 +1,4 @@
-Section 1: Config File Info
+Section 1: PCI Space Config File Info
 The Configuration file contains the NVME PCI Express registers which the QEMU
 uses to initialize its PCI space. The CFG_NAME tag defines a unique value
 that is constant across a set of registers which fall under the same category.
@@ -7,7 +7,7 @@ Following are the CFG_NAME's supported by the parser :
 PCIHEADER : PCI Header Space
 PMCAP     : PCI Power Management Capabilities
 MSICAP    : Message Signaled Interrupt Capability
-MSIXCAP   : MSI-X Capability
+MSIXCAP   : MSI-X Capability (Not Supported)
 PXACP     : PCI Express Capability
 AERCAP    : Advanced Error Reporting Capability
 
@@ -340,7 +340,7 @@ defaulted to 0
 	NAME = "INTR"
 	OFFSET = 0x3C
 	LENGTH = 0x02
-	VALUE = 0x0
+	VALUE = 0x0100
 	RO_MASK = 0xFF00
 	RW_MASK = 0x00FF
 	RWC_MASK = 0x0000
@@ -377,7 +377,7 @@ defaulted to 0
 	NAME = "PID"
 	OFFSET = 0x00
 	LENGTH = 0x02
-	VALUE = 0x6001
+	VALUE = 0x6601
 	RO_MASK = 0xFFFF
 	RW_MASK = 0x0000
 	RWC_MASK = 0x0000
@@ -494,6 +494,9 @@ defaulted to 0
 	DESC = "Message Signaled Interrupt Pending Bits"
 </REG>
 
+MSIXCAP functionality is not supported for NVME because of the default code
+inside the msix.c (msix_add_config), which assumes MSIX should not point to any other
+capability.Thus values inside MSIXCAP are ignored!
 <REG>
 	CFG_NAME = MSIXCAP
 	NAME = "MXID"
