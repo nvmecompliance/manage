@@ -1,0 +1,205 @@
+ection 1: NVME Space Config File Info
+The Configuration file contains the NVME space registers which the QEMU
+uses to initialize its NVME space. The CFG_NAME tag defines a unique value
+that is constant across a set of registers which fall under the same category.
+
+Following are the CFG_NAME's supported by the parser for NVME space:
+CNTRLREG : NVME Controller Registers
+
+The NAME tag indicates the name specific to each register. It should be
+noted that, NAME tag can be any general name and does not have to be unique
+like CFG_NAME.
+
+The OFFSET tag gives a relative offset of this register in its corresponding
+section defined by CFG_NAME. The parser code uses the above offset for
+storing the values in the NVME space.
+
+The LENGTH indicates the length in bytes of the resgister defined in
+NVME space.
+
+The VALUE tag of the registers is where you set the required values
+that the NVME card needs to get initialized with.
+
+The reamaining tags indicate a MASK for the registers if it is Read Only, Read
+Write, Read Write Clear or Read write Set.If the mask is set to 1 indicates it
+has the corresponding capability. For example if RO_MASK = 0x1 then it
+indicates that the last bit in that register has a capability of read only.
+
+Each line in the file needs to be no more than 255 charachters and the CFG_NAME
+has a limit of 50 charachters.
+
+Values (VALUE) to be written can be either 8 bits, 16 bits or 32 bits with
+the appropriate lengths. If you want to write 64 bit values , divide it
+into two 32 bit values and enter in the config file.
+
+Doorbell Registers support has not been added yet ,and is defaulted to 64
+Queues in NVME module
+
+Section 2: Parsing Syntax
+    The Qemu parser, would only look for values under the <REG> and </REG>.
+Thus anything written outside the <REG> and </REG> would be considered as
+invalid values. Thus this is a good place for writing down comments.
+    There are 10 fields inside the <REG> and </REG> header. If some of the
+fields are not applicable to a particular register, then just default it
+to 0x00. If by mistake you forget to list down some of the entries
+between the headers, the parser would take care of it and default it to
+0x00.
+    <COMMENT> and </COMMENT> is used if you want the parser to neglect the values.
+Moreover anything written outside <REG> and </REG> block is also ignored by
+the parser
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "CAP_LOWER_32"
+	OFFSET = 0x00
+	LENGTH = 0x04
+	VALUE = 0x0f0103FF
+	RO_MASK = 0xFFFFFFFF
+	RW_MASK = 0x00000000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Controller Capabilities Lower 32 bits"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "CAP_HIGHER_32"
+	OFFSET = 0x04
+	LENGTH = 0x04
+	VALUE = 0x00000020
+	RO_MASK = 0xFFFFFFFF
+	RW_MASK = 0x00000000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Controller Capabilities Higher 32 bits"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "VS"
+	OFFSET = 0x08
+	LENGTH = 0x04
+	VALUE = 0x00010000
+	RO_MASK = 0xFFFFFFFF
+	RW_MASK = 0x00000000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Version"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "INTMS"
+	OFFSET = 0x0c
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000000
+	RW_MASK = 0x00000000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0xFFFFFFFF
+	DESC = "Interrupt Mask Set"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "INTMC"
+	OFFSET = 0x10
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000000
+	RW_MASK = 0x00000000
+	RWC_MASK = 0xFFFFFFFF
+	RWS_MASK = 0x00000000
+	DESC = "Interrupt Mask Clear"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "CC"
+	OFFSET = 0x14
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0xFF00000E
+	RW_MASK = 0x00FFFFF1
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Controller Configuration"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "CSTS"
+	OFFSET = 0x1c
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0xFFFFFFFF
+	RW_MASK = 0x00000000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Controller Status"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "AQA"
+	OFFSET = 0x24
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0xF000F000
+	RW_MASK = 0x0FFF0FFF
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Admin Queue Attributes"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "ASQ_LOWER_32"
+	OFFSET = 0x28
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000FFF
+	RW_MASK = 0xFFFFF000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Admin Submission Queue Base Address Lower 32 bits"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "ASQ_HIGHER_32"
+	OFFSET = 0x2c
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000000
+	RW_MASK = 0xFFFFFFFF
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Admin Submission Queue Base Address Higher 32 bits"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "ACQ_LOWER_32"
+	OFFSET = 0x30
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000FFF
+	RW_MASK = 0xFFFFF000
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Admin Completion Queue Base Address Lower 32 bits"
+</REG>
+
+<REG>
+	CFG_NAME = CNTRLREG
+	NAME = "ACQ_HIGHER_32"
+	OFFSET = 0x34
+	LENGTH = 0x04
+	VALUE = 0x00000000
+	RO_MASK = 0x00000000
+	RW_MASK = 0xFFFFFFFF
+	RWC_MASK = 0x00000000
+	RWS_MASK = 0x00000000
+	DESC = "Admin Completion Queue Base Address Higher 32 bits"
+</REG>
