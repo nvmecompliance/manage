@@ -1,7 +1,9 @@
-ection 1: NVME Space Config File Info
+Section 1: NVME Space Config File Info
 The Configuration file contains the NVME space registers which the QEMU
-uses to initialize its NVME space. The CFG_NAME tag defines a unique value
-that is constant across a set of registers which fall under the same category.
+uses to initialize its NVME space.Note that these values would be read
+on initialization as well as on future resets of NVME device.The CFG_NAME
+tag defines a unique value that is constant across a set of registers
+which fall under the same category.
 
 Following are the CFG_NAME's supported by the parser for NVME space:
 CNTRLREG : NVME Controller Registers
