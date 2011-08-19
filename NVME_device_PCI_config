@@ -99,6 +99,9 @@ the parser
 
 </REG>
 
+Bits CMD.IOSE and CMD.MSE are defaulted to 1 by Qemu PCI Host
+module. You can configure them once the system boots using
+the respective driver
 <REG>
 	CFG_NAME = PCIHEADER
 	NAME = "CMD"
@@ -230,14 +233,15 @@ BIST Reg is not supported in QEMU and thus has been defaulted to 0x00
 	DESC = "Memory Register Base address upper 32 bits"
 </REG>
 
-IDBAR Reg has been set to 0x00 instead of 0x01 as described in section 2.1.12
-and 3.2 of NVM Express 1.0a, and thus defaulted to 00 in code
+Last bit of IDBAR Reg will be defaulted to 0 instead of 1 when
+CMD.IOSE in PCI space is not set
+(Refer: section 2.1.12 and 3.2 of NVM Express 1.0a)
 <REG>
 	CFG_NAME = PCIHEADER
 	NAME = "IDBAR(BAR2)"
 	OFFSET = 0x18
 	LENGTH = 0x04
-	VALUE = 0x0
+	VALUE = 0x01
 	RO_MASK = 0x7
 	RW_MASK = 0xFFFFFFF8
 	RWC_MASK = 0x0000
