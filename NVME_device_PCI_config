@@ -107,7 +107,7 @@ the respective driver
 	NAME = "CMD"
 	OFFSET = 0x04
 	LENGTH = 0x02
-	VALUE = 0x02
+	VALUE = 0x03
 	RO_MASK = 0xFBF8
 	RW_MASK = 0x0447
 	RWC_MASK = 0x0
@@ -193,7 +193,7 @@ the respective driver
 	DESC = "Header Type"
 </REG>
 
-BIST Reg is not supported in QEMU and thus has been defaulted to 0x00
+BIST Reg is defaulted to 0x00 when BIST.BC is 0
 <REG>
 	CFG_NAME = PCIHEADER
 	NAME = "BIST"
@@ -233,8 +233,7 @@ BIST Reg is not supported in QEMU and thus has been defaulted to 0x00
 	DESC = "Memory Register Base address upper 32 bits"
 </REG>
 
-Last bit of IDBAR Reg will be defaulted to 0 instead of 1 when
-CMD.IOSE in PCI space is not set
+IDBAR Reg will be read as 0h when CMD.IOSE in PCI space is not set
 (Refer: section 2.1.12 and 3.2 of NVM Express 1.0a)
 <REG>
 	CFG_NAME = PCIHEADER
@@ -313,8 +312,8 @@ CMD.IOSE in PCI space is not set
 	DESC = "Sub System Identfiers"
 </REG>
 
-EROM Register is not supported for NVME and thus "EROM" value is ignored and
-defaulted to 0
+If we remove EROM Register from this list it means "EROM" is not supported and thus is ignored
+and is defaulted to 0 as mentioned in the NVME specs
 <REG>
 	CFG_NAME = PCIHEADER
 	NAME = "EROM"
@@ -578,7 +577,7 @@ capability.Thus values inside MSIXCAP are ignored!
 	NAME = "PXDCAP"
 	OFFSET = 0x04
 	LENGTH = 0x04
-	VALUE = 0x10008000
+	VALUE = 0x8000
 	RO_MASK = 0xFFFFFFFF
 	RW_MASK = 0x0
 	RWC_MASK = 0x0
