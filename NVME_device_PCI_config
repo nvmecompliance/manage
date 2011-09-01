@@ -7,9 +7,13 @@ Following are the CFG_NAME's supported by the parser :
 PCIHEADER : PCI Header Space
 PMCAP     : PCI Power Management Capabilities
 MSICAP    : Message Signaled Interrupt Capability
-MSIXCAP   : MSI-X Capability (Not Supported)
+MSIXCAP   : MSI-X Capability (Defaulted in code)
+MSIXCAP functionality is not supported for NVME because of the default code
+inside the msix.c (msix_add_config), which assumes MSIX should not point to any other
+capability.Thus values inside MSIXCAP are ignored!
+
 PXACP     : PCI Express Capability
-AERCAP    : Advanced Error Reporting Capability
+AERCAP    : Advanced Error Reporting Capability (Not Supported)
 
 It should be noted that PCIHEADER should be the first section followed by
 any order of other sections in the file.
@@ -86,7 +90,7 @@ Moreover anything written outside <REG> and </REG> block is also ignored by
 the parser
 
 <REG>
-	CFG_NAME = PCIHEADER
+	CFG_NAME =PCIHEADER
 	NAME = "ID"
 	OFFSET = 0x00
 	LENGTH = 0x04
@@ -107,7 +111,7 @@ the respective driver
 	NAME = "CMD"
 	OFFSET = 0x04
 	LENGTH = 0x02
-	VALUE = 0x02
+	VALUE = 0x03
 	RO_MASK = 0xFBF8
 	RW_MASK = 0x0447
 	RWC_MASK = 0x0
@@ -497,57 +501,6 @@ and is defaulted to 0 as mentioned in the NVME specs
 	DESC = "Message Signaled Interrupt Pending Bits"
 </REG>
 
-MSIXCAP functionality is not supported for NVME because of the default code
-inside the msix.c (msix_add_config), which assumes MSIX should not point to any other
-capability.Thus values inside MSIXCAP are ignored!
-<REG>
-	CFG_NAME = MSIXCAP
-	NAME = "MXID"
-	OFFSET = 0x0
-	LENGTH = 0x02
-	VALUE = 0x9711
-	RO_MASK = 0xFFFF
-	RW_MASK = 0x0
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "MSI-X Identifiers"
-</REG>
-<REG>
-	CFG_NAME = MSIXCAP
-	NAME = "MXC"
-	OFFSET = 0x02
-	LENGTH = 0x02
-	VALUE = 0x01
-	RO_MASK = 0x3FFF
-	RW_MASK = 0xC000
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "MSI-X Message Control"
-</REG>
-<REG>
-	CFG_NAME = MSIXCAP
-	NAME = "MTAB"
-	OFFSET = 0x04
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFFFFFFF
-	RW_MASK = 0x0
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "MSI-X Table Offset"
-</REG>
-<REG>
-	CFG_NAME = MSIXCAP
-	NAME = "MPBA"
-	OFFSET = 0x08
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFFFFFFF
-	RW_MASK = 0x0
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "MSI-X PBA Offset"
-</REG>
 <REG>
 	CFG_NAME = PXCAP
 	NAME = "PXID"
@@ -667,113 +620,4 @@ capability.Thus values inside MSIXCAP are ignored!
 	RWC_MASK = 0x0
 	RWS_MASK = 0x0
 	DESC = "PCI Express Device Control 2"
-</REG>
-
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERID"
-	OFFSET = 0x00
-	LENGTH = 0x04
-	VALUE = 0x20001
-	RO_MASK = 0xFFFFFFFF
-	RW_MASK = 0x0
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Capability ID"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERUCES"
-	OFFSET = 0x04
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFEAAFEF
-	RW_MASK = 0x0
-	RWC_MASK = 0x3FFF010
-	RWS_MASK = 0x0000
-	DESC = "AER Uncorrectable Error Status Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERUCEM"
-	OFFSET = 0x08
-	LENGTH = 0x04
-	VALUE = 0x400000
-	RO_MASK = 0xFFEAAFEF
-	RW_MASK = 0x3FFF010
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Uncorrectable Error Mask Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERUCESEV"
-	OFFSET = 0x0C
-	LENGTH = 0x04
-	VALUE = 0x462010
-	RO_MASK = 0xFFEAAFEF
-	RW_MASK = 0x3FFF010
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Uncorrectable Error Severity Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERCS"
-	OFFSET = 0x10
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFFFCE3E
-	RW_MASK = 0x0
-	RWC_MASK = 0xF1C1
-	RWS_MASK = 0x0
-	DESC = "AER Correctable Error Status Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERCEM"
-	OFFSET = 0x14
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFFFCE3E
-	RW_MASK = 0xF1C1
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Correctable Error Mask Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERCC"
-	OFFSET = 0x18
-	LENGTH = 0x04
-	VALUE = 0x0
-	RO_MASK = 0xFFFFFFFF
-	RW_MASK = 0x740
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Capabilities and Control Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERHL"
-	OFFSET = 0x1C
-	LENGTH = 0x02
-	VALUE = 0x0
-	RO_MASK = 0xFFFF
-	RW_MASK = 0x0
-	RWC_MASK = 0x0
-	RWS_MASK = 0x0
-	DESC = "AER Header Log Register"
-</REG>
-<REG>
-	CFG_NAME = AERCAP
-	NAME = "AERTLP"
-	OFFSET = 0x38
-	LENGTH = 0x02
-	VALUE = 0x0
-	RO_MASK = 0xFFFF
-	RW_MASK = 0x0000
-	RWC_MASK = 0x0000
-	RWS_MASK = 0x0000
-	DESC = "AER TLP Prefix Log Register"
 </REG>
