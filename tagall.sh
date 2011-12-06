@@ -35,8 +35,6 @@ fi
 
 tagname=compliance_rel=${tagrel}
 
-cd ../qemu
-git tag -a -m "${msg}" ${tagname}
 cd ../tnvme
 git tag -a -m "${msg}" ${tagname}
 cd ../dnvme
