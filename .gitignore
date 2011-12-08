@@ -1,8 +1,8 @@
 vdisk/
+Logs/
 
 *.iso
 *.img
 *.rpm
 *.log
-.~lock.readme.start.odt#
-.~lock.readme.design.docx#
+.~lock.readme.*
