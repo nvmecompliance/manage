@@ -1,10 +1,9 @@
 This is the manage repository in the nvmecompliance project.
 
 This repo contains some support components for managing test runs.
-<<<<<<< HEAD
+
 Follow steps in file readme.startHere.odt which is located in this
 directory to get started.
 
 contact nvmecompliance@intel.com for more information.
-=======
->>>>>>> 4d027d145981b70d4780a855fbc7146d8eae5cc6
+
