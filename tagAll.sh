@@ -21,9 +21,10 @@ msg=$2
 Usage() {
 echo "usage...."
 echo "  This script places a annotated tag upon all repos under nvme"
-echo "  $0 <tag_rev> <msg."
-echo "    <tag_rev> Pass the tags revision number; format "x.y.z", concatinated"
-echo "              with a larger string of "compliance_rel=x.y.z""
+echo "  $0 <tag_rev> <msg>"
+echo "    <tag_rev> Pass the tags revision number; format "x.y.z", this is"
+echo "              prepended with a larger string of "
+echo "              "nvmecompliance_release=x.y.z""
 echo "    <msg>     Pass the message to be commited with the tag creation"
 echo ""
 }
@@ -33,14 +34,23 @@ if [ -z "$tagrel" ] || [ -z "$msg" ]; then
 	exit
 fi
 
-tagname=compliance_rel=${tagrel}
+tagname=nvmecompliance_release=${tagrel}
 
 cd ../tnvme
 git tag -a -m "${msg}" ${tagname}
+git push --tags
+git tag -l -n1
 cd ../dnvme
 git tag -a -m "${msg}" ${tagname}
+git push --tags
+git tag -l -n1
 cd ../manage
 git tag -a -m "${msg}" ${tagname}
-
+git push --tags
 git tag -l -n1
+cd ../qemu
+git tag -a -m "${msg}" ${tagname}
+git push --tags
+git tag -l -n1
+
 exit
