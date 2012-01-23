@@ -37,18 +37,22 @@ fi
 tagname=nvmecompliance_release=${tagrel}
 
 cd ../tnvme
+git checkout master
 git tag -a -m "${msg}" ${tagname}
 git push --tags
 git tag -l -n1
 cd ../dnvme
+git checkout master
 git tag -a -m "${msg}" ${tagname}
 git push --tags
 git tag -l -n1
 cd ../manage
+git checkout master
 git tag -a -m "${msg}" ${tagname}
 git push --tags
 git tag -l -n1
 cd ../qemu
+git checkout master
 git tag -a -m "${msg}" ${tagname}
 git push --tags
 git tag -l -n1
