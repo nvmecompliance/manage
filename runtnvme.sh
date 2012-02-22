@@ -16,6 +16,7 @@
 #
 
 TNVME_CMD_LINE=$@
+BASE_LOG_DIR=./Logs
 
 Usage() {
 echo "usage...."
@@ -28,7 +29,23 @@ if [ -z $TNVME_CMD_LINE ]; then
   exit
 fi
 
-rm -rf ./Logs
-mkdir -m 0777 ./Logs
-echo ../tnvme/tnvme -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ./Logs/tnvme.out
-../tnvme/tnvme -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ./Logs/tnvme.out
+# Create a root logging directory. Sub-directories will be created by tnvme
+# to house the dumping of various resources during test execution. A utility,
+# svlogd, is used to create rotating logs from tnvme's stdout/stderr.
+# You will most likley have to install svlogd to take advatage of the huge
+# time savings introduced by this new logging/archiving scheme. The
+# instructions that dictate svlogd's behavior are contained in ./Logs/config 
+rm -rf ${BASE_LOG_DIR}
+mkdir -m 0777 ${BASE_LOG_DIR}
+echo "s10000000" >${BASE_LOG_DIR}/config
+echo "n10" >>${BASE_LOG_DIR}/config
+
+# ./Logs/GrpInformative contains the resource dumps of GrpInformative
+# ./Logs/GrpPending contains the resource dumps of the last group which executed
+# ./Logs/current is the current output from tnvme via stderr/stdout
+# ./Logs/*.s files are the result of svlogd rotating ./Logs/current
+../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
+
+# Cleanup files used to rotate logs, they are just noise
+rm -f ${BASE_LOG_DIR}/lock
+rm -f ${BASE_LOG_DIR}/config
