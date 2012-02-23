@@ -17,6 +17,7 @@
 
 TNVME_CMD_LINE=$@
 BASE_LOG_DIR=./Logs
+RUNNING_TEST=false
 
 Usage() {
 echo "usage...."
@@ -27,6 +28,10 @@ echo ""
 if [ -z $TNVME_CMD_LINE ]; then
   Usage
   exit
+fi
+
+if [[ "$TNVME_CMD_LINE" == *-t* ]]; then
+    RUNNING_TEST=true
 fi
 
 # Create a root logging directory. Sub-directories will be created by tnvme
@@ -44,8 +49,17 @@ echo "n10" >>${BASE_LOG_DIR}/config
 # ./Logs/GrpPending contains the resource dumps of the last group which executed
 # ./Logs/current is the current output from tnvme via stderr/stdout
 # ./Logs/*.s files are the result of svlogd rotating ./Logs/current
-../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
+if [ $RUNNING_TEST == true ]; then
+    # Pipe tnvme into the logging utility for 8 fold speed increase
+    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
+else
+    # Allow tnvme to be slow, because we want to see the output immediately
+    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_LOG_DIR}/current
+fi
 
 # Cleanup files used to rotate logs, they are just noise
 rm -f ${BASE_LOG_DIR}/lock
 rm -f ${BASE_LOG_DIR}/config
+
+# Report the end of the current log file
+grep -A 4 "Iteration SUMMARY" ${BASE_LOG_DIR}/current
