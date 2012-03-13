@@ -51,7 +51,7 @@ echo "n10" >>${BASE_LOG_DIR}/config
 # ./Logs/*.s files are the result of svlogd rotating ./Logs/current
 if [ $RUNNING_TEST == true ]; then
     # Pipe tnvme into the logging utility for 8 fold speed increase
-    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
+    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 4096 -l 0 ${BASE_LOG_DIR}
 else
     # Allow tnvme to be slow, because we want to see the output immediately
     ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_LOG_DIR}/current
