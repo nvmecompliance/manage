@@ -25,7 +25,7 @@ echo "  $0 <tnvme cmd line options>"
 echo ""
 }
 
-if [ -z $TNVME_CMD_LINE ]; then
+if [ -z "$TNVME_CMD_LINE" ]; then
   Usage
   exit
 fi
