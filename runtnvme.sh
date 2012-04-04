@@ -42,8 +42,8 @@ fi
 # instructions that dictate svlogd's behavior are contained in ./Logs/config 
 rm -rf ${BASE_LOG_DIR}
 mkdir -m 0777 ${BASE_LOG_DIR}
-echo "s10000000" >${BASE_LOG_DIR}/config
-echo "n10" >>${BASE_LOG_DIR}/config
+echo "s1000000" >${BASE_LOG_DIR}/config
+echo "n3" >>${BASE_LOG_DIR}/config
 
 # ./Logs/GrpInformative contains the resource dumps of GrpInformative
 # ./Logs/GrpPending contains the resource dumps of the last group which executed
@@ -51,7 +51,7 @@ echo "n10" >>${BASE_LOG_DIR}/config
 # ./Logs/*.s files are the result of svlogd rotating ./Logs/current
 if [ $RUNNING_TEST == true ]; then
     # Pipe tnvme into the logging utility for 8 fold speed increase
-    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 4096 -l 0 ${BASE_LOG_DIR}
+    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
 else
     # Allow tnvme to be slow, because we want to see the output immediately
     ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_LOG_DIR}/current
