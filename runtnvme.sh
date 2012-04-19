@@ -16,7 +16,7 @@
 #
 
 TNVME_CMD_LINE=$@
-BASE_LOG_DIR=./Logs
+BASE_OUT_DIR=./Logs
 RUNNING_TEST=false
 
 Usage() {
@@ -39,27 +39,27 @@ fi
 # svlogd, is used to create rotating logs from tnvme's stdout/stderr.
 # You will most likley have to install svlogd to take advatage of the huge
 # time savings introduced by this new logging/archiving scheme. The
-# instructions that dictate svlogd's behavior are contained in ./Logs/config 
-rm -rf ${BASE_LOG_DIR}
-mkdir -m 0777 ${BASE_LOG_DIR}
-echo "s1000000" >${BASE_LOG_DIR}/config
-echo "n3" >>${BASE_LOG_DIR}/config
+# instructions dictating svlogd's behavior contained in ./${BASE_OUT_DIR}/config
+rm -rf ${BASE_OUT_DIR}
+mkdir -m 0777 ${BASE_OUT_DIR}
+echo "s1000000" >${BASE_OUT_DIR}/config
+echo "n3" >>${BASE_OUT_DIR}/config
 
 # ./Logs/GrpInformative contains the resource dumps of GrpInformative
 # ./Logs/GrpPending contains the resource dumps of the last group which executed
 # ./Logs/current is the current output from tnvme via stderr/stdout
-# ./Logs/*.s files are the result of svlogd rotating ./Logs/current
+# ./Logs/*.s files are the result of svlogd rotating ./${BASE_OUT_DIR}/current
 if [ $RUNNING_TEST == true ]; then
     # Pipe tnvme into the logging utility for 8 fold speed increase
-    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_LOG_DIR}
+    ../tnvme/tnvme --dump=${BASE_OUT_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
 else
     # Allow tnvme to be slow, because we want to see the output immediately
-    ../tnvme/tnvme --log=${BASE_LOG_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_LOG_DIR}/current
+    ../tnvme/tnvme --dump=${BASE_OUT_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_OUT_DIR}/current
 fi
 
 # Cleanup files used to rotate logs, they are just noise
-rm -f ${BASE_LOG_DIR}/lock
-rm -f ${BASE_LOG_DIR}/config
+rm -f ${BASE_OUT_DIR}/lock
+rm -f ${BASE_OUT_DIR}/config
 
 # Report the end of the current log file
-grep -A 4 "Iteration SUMMARY" ${BASE_LOG_DIR}/current
+grep -A 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
