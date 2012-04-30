@@ -66,6 +66,10 @@ rm -f ${BASE_OUT_DIR}/config
 grep -A 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
 
 END_TIME=`date +%s`
-ELAPSED=`expr $END_TIME - $START_TIME`
-echo "Completed at:" `date`
-echo "Elapsed runtime (hh:mm:ss): " `date -d 00:00:${ELAPSED} +%H:%M:%S`
+delta=`expr $END_TIME - $START_TIME`
+completed="Completed at `date`"
+elapsed="Elapsed runtime (hh:mm:ss): `date -d 00:00:${delta} +%H:%M:%S`"
+echo $completed
+echo $elapsed
+echo $completed >> ${BASE_OUT_DIR}/current
+echo $elapsed >> ${BASE_OUT_DIR}/current
