@@ -15,7 +15,7 @@
 #   limitations under the License.
 #
 
-START_TIME=`date +%s`
+starttime="$(date +%s)"
 TNVME_CMD_LINE=$@
 BASE_OUT_DIR=./Logs
 RUNNING_TEST=false
@@ -65,10 +65,14 @@ rm -f ${BASE_OUT_DIR}/config
 # Report the end of the current log file
 grep -A 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
 
-END_TIME=`date +%s`
-delta=`expr $END_TIME - $START_TIME`
+stoptime="$(date +%s)"
+delta="$(expr $stoptime - $starttime)"
 completed="Completed at `date`"
-elapsed="Elapsed runtime (hh:mm:ss): `date -d 00:00:${delta} +%H:%M:%S`"
+remainder="$(expr $delta % 3600)"
+hours="$(expr $(expr $delta - $remainder) / 3600)"
+seconds="$(expr $remainder % 60)"
+minutes="$(expr $(expr $remainder - $seconds) / 60)"
+elapsed="Elapsed runtime (hh:mm:ss): $hours:$minutes:$seconds"
 echo $completed
 echo $elapsed
 echo $completed >> ${BASE_OUT_DIR}/current
