@@ -28,7 +28,7 @@ echo ""
 
 if [ -z "$TNVME_CMD_LINE" ]; then
   Usage
-  exit
+  exit -1
 fi
 
 if [[ "$TNVME_CMD_LINE" == *-t* ]]; then
@@ -53,9 +53,11 @@ echo "n3" >>${BASE_OUT_DIR}/config
 if [ $RUNNING_TEST == true ]; then
     # Pipe tnvme into the logging utility for 8 fold speed increase
     ../tnvme/tnvme --dump=${BASE_OUT_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
+    ret=${PIPESTATUS[0]}
 else
     # Allow tnvme to be slow, because we want to see the output immediately
     ../tnvme/tnvme --dump=${BASE_OUT_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | tee ${BASE_OUT_DIR}/current
+    ret=${PIPESTATUS[0]}
 fi
 
 # Cleanup files used to rotate logs, they are just noise
@@ -63,7 +65,11 @@ rm -f ${BASE_OUT_DIR}/lock
 rm -f ${BASE_OUT_DIR}/config
 
 # Report the end of the current log file
-grep -A 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
+if [[ $ret -ne 0 ]]; then
+  grep -C 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
+else
+  grep -A 4 "Iteration SUMMARY" ${BASE_OUT_DIR}/current
+fi
 
 stoptime="$(date +%s)"
 delta="$(expr $stoptime - $starttime)"
@@ -77,3 +83,4 @@ echo $completed
 echo $elapsed
 echo $completed >> ${BASE_OUT_DIR}/current
 echo $elapsed >> ${BASE_OUT_DIR}/current
+exit $ret
