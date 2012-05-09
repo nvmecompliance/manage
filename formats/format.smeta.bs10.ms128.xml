@@ -25,7 +25,19 @@
                 <pil>0x00</pil>     <!-- Must be base 16 -->
                 <pi>0x00</pi>       <!-- Must be base 16 -->
                 <ms>0x00</ms>       <!-- Must be base 16 -->
-                <lbaf>0x02</lbaf>   <!-- Must be base 16 -->
+                <lbaf>0x07</lbaf>   <!-- Must be base 16 -->
+            </dw10>
+        </cmd>
+    </namespace>
+    <namespace id="2">  <!-- Must have atrribute 'id' in base 10             -->
+        <cmd>   <!-- Specify a single 'cmd' tag for each 'namespace'         -->
+            <dw10>  <!-- Define DWORD10 values to populate format NVM cmd    -->
+                <!-- Any DWORD10 field missing is assumed zero(0).           -->
+                <ses>0x00</ses>     <!-- Must be base 16 -->
+                <pil>0x00</pil>     <!-- Must be base 16 -->
+                <pi>0x00</pi>       <!-- Must be base 16 -->
+                <ms>0x00</ms>       <!-- Must be base 16 -->
+                <lbaf>0x07</lbaf>   <!-- Must be base 16 -->
             </dw10>
         </cmd>
     </namespace>

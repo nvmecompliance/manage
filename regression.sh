@@ -30,7 +30,7 @@
 # investigate.
 
 TNVME_CMD_LINE=$@
-FILES=format.*.xml
+FILES=./formats/format.*.xml
 
 Usage() {
 echo "usage...."

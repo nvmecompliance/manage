@@ -35,7 +35,7 @@ fi
 if [ -z $isofile ]; then
 	# sudo needed because kvm module requires higher priveledged user; default
     # 4 namespaces each of size 512MB.
-	sudo ../qemu/x86_64-softmmu/qemu-system-x86_64 -m 4096 -hda ./vdisk/${vdisk} -device nvme,namespaces=4,size=512 --enable-kvm -smp 2
+	sudo ../qemu/x86_64-softmmu/qemu-system-x86_64 -m 4096 -hda ./vdisk/${vdisk} -device nvme,namespaces=2,size=512 --enable-kvm -smp 2
 else
 	../qemu/x86_64-softmmu/qemu-system-x86_64 -m 4096 -cdrom ./vkernel/${isofile} -hda ./vdisk/${vdisk} -device nvme
 fi
