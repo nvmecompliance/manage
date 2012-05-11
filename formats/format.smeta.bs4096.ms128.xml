@@ -24,8 +24,8 @@
                 <ses>0x00</ses>     <!-- Must be base 16 -->
                 <pil>0x00</pil>     <!-- Must be base 16 -->
                 <pi>0x00</pi>       <!-- Must be base 16 -->
-                <ms>0x01</ms>       <!-- Must be base 16 -->
-                <lbaf>0x14</lbaf>   <!-- Must be base 16 -->
+                <ms>0x00</ms>       <!-- Must be base 16 -->
+                <lbaf>0x0F</lbaf>   <!-- Must be base 16 -->
             </dw10>
         </cmd>
     </namespace>
@@ -36,8 +36,8 @@
                 <ses>0x00</ses>     <!-- Must be base 16 -->
                 <pil>0x00</pil>     <!-- Must be base 16 -->
                 <pi>0x00</pi>       <!-- Must be base 16 -->
-                <ms>0x01</ms>       <!-- Must be base 16 -->
-                <lbaf>0x14</lbaf>   <!-- Must be base 16 -->
+                <ms>0x00</ms>       <!-- Must be base 16 -->
+                <lbaf>0x0F</lbaf>   <!-- Must be base 16 -->
             </dw10>
         </cmd>
     </namespace>

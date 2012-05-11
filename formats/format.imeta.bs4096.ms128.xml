@@ -25,7 +25,7 @@
                 <pil>0x00</pil>     <!-- Must be base 16 -->
                 <pi>0x00</pi>       <!-- Must be base 16 -->
                 <ms>0x01</ms>       <!-- Must be base 16 -->
-                <lbaf>0x15</lbaf>   <!-- Must be base 16 -->
+                <lbaf>0x0F</lbaf>   <!-- Must be base 16 -->
             </dw10>
         </cmd>
     </namespace>
@@ -37,7 +37,7 @@
                 <pil>0x00</pil>     <!-- Must be base 16 -->
                 <pi>0x00</pi>       <!-- Must be base 16 -->
                 <ms>0x01</ms>       <!-- Must be base 16 -->
-                <lbaf>0x15</lbaf>   <!-- Must be base 16 -->
+                <lbaf>0x0F</lbaf>   <!-- Must be base 16 -->
             </dw10>
         </cmd>
     </namespace>
