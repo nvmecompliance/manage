@@ -29,6 +29,8 @@
 # a test throws an expection, the script immediately stops for user to
 # investigate.
 
+starttime="$(date +%s)"
+started=`date`
 TNVME_CMD_LINE=$@
 FILES=./formats/format.*.xml
 
@@ -43,7 +45,33 @@ if [ -z "$TNVME_CMD_LINE" ]; then
   exit -1
 fi
 
+function cal_exec_time() {
+    stoptime="$(date +%s)"
+    delta="$(expr $stoptime - $starttime)"
+    started="Regression started at $started"
+    completed="Regression completed at `date`"
+    remainder="$(expr $delta % 3600)"
+    hours="$(expr $(expr $delta - $remainder) / 3600)"
+    seconds="$(expr $remainder % 60)"
+    minutes="$(expr $(expr $remainder - $seconds) / 60)"
+    elapsed="Regression elapsed runtime (hh:mm:ss): $hours:$minutes:$seconds"
+    echo $started
+    echo $completed
+    echo $elapsed
+    echo $completed >> ${BASE_OUT_DIR}/current
+    echo $elapsed >> ${BASE_OUT_DIR}/current
+    echo "Regression done for $file LBA formatted xml files."
+    if [[ $retval -ne 0 ]]; then
+        fileArray=($FILES)
+        for (( i=0; i<$file; i++ ));
+        do
+            echo "${fileArray[$i]}"
+        done
+    fi
+}
+
 file=0
+retval=0
 # Loop through all the format files available in the current directory. 
 for f in $FILES
 do
@@ -52,6 +80,8 @@ echo "FormatNVM using $f for nsid = 1"
 ret=${PIPESTATUS[0]}
 if [[ $ret -ne 0 ]]; then
     echo "Failed formatting using $f"
+    retval=-1
+    cal_exec_time
     exit $ret
 fi
 
@@ -61,9 +91,12 @@ fi
 ret=${PIPESTATUS[0]}
 if [[ $ret -ne 0 ]]; then
     echo "Failed when executing test suite using $f formatted namespace."
+    retval=-1
+    cal_exec_time
     exit $ret
 fi
 file=$(($file+1))
 done
-echo "Total LBA formatted xml files $file."
+
+cal_exec_time
 exit $ret
