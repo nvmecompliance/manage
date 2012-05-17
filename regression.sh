@@ -70,14 +70,26 @@ function cal_exec_time() {
 
 file=0
 retval=0
+
 # Loop through all the format files available in the current directory. 
 for f in $FILES
 do
-echo "FormatNVM using $f for nsid = 1"
+
+echo "Format the DUT using $f"
 ./runtnvme.sh -f $f
 ret=${PIPESTATUS[0]}
 if [[ $ret -ne 0 ]]; then
     echo "Failed formatting using $f"
+    retval=-1
+    cal_exec_time
+    exit $ret
+fi
+
+echo "Compare golden data against the DUT"
+./runtnvme.sh --golden=./identify.gold.xml
+ret=${PIPESTATUS[0]}
+if [[ $ret -ne 0 ]]; then
+    echo "Failed comparing golden data"
     retval=-1
     cal_exec_time
     exit $ret
@@ -88,11 +100,12 @@ fi
 ./runtnvme.sh $TNVME_CMD_LINE
 ret=${PIPESTATUS[0]}
 if [[ $ret -ne 0 ]]; then
-    echo "Failed when executing test suite using $f formatted namespace."
+    echo "Failed compliance suite; against the $f format"
     retval=-1
     cal_exec_time
     exit $ret
 fi
+
 file=$(($file+1))
 done
 
