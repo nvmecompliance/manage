@@ -58,8 +58,6 @@ function cal_exec_time() {
     echo $started
     echo $completed
     echo $elapsed
-    echo $completed >> ${BASE_OUT_DIR}/current
-    echo $elapsed >> ${BASE_OUT_DIR}/current
     echo "Regression done for $file LBA formatted xml files."
     if [[ $retval -ne 0 ]]; then
         fileArray=($FILES)
