@@ -54,6 +54,20 @@ tail --lines=10 ${BASE_OUT_DIR}/current
 rm -f ${BASE_OUT_DIR}/lock
 rm -f ${BASE_OUT_DIR}/config
 
+# rename log files to readable format. svlogd names files automatically and
+# adds current timestamp as the name of the file. Changing these files to
+# current1, current2 and current3 where current3 being the immediate prior to
+# current log file makes it easy to read.
+logfiles=./${BASE_OUT_DIR}/@*.s
+i=1
+for c in $logfiles
+do
+  if [ -f $c ]; then
+    mv $c ./${BASE_OUT_DIR}/current$i
+    i=$(($i+1))
+  fi
+done
+
 stoptime="$(date +%s)"
 delta="$(expr $stoptime - $starttime)"
 completed="Completed at `date`"
