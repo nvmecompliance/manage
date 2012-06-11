@@ -56,15 +56,15 @@ rm -f ${BASE_OUT_DIR}/config
 
 # rename log files to readable format. svlogd names files automatically and
 # adds current timestamp as the name of the file. Changing these files to
-# current1, current2 and current3 where current3 being the immediate prior to
-# current log file makes it easy to read.
-logfiles=./${BASE_OUT_DIR}/@*.s
-i=1
-for c in $logfiles
+# current0, current1, current2 and current3, where current0 being the latest
+# and current3 being the oldest.
+logfiles=( ${BASE_OUT_DIR}/@*.s )
+i=${#logfiles[@]}
+for c in "${logfiles[@]}"
 do
   if [ -f $c ]; then
-    mv $c ./${BASE_OUT_DIR}/current$i
-    i=$(($i+1))
+    mv $c ${BASE_OUT_DIR}/current$i
+    i=$(($i-1))
   fi
 done
 
@@ -80,4 +80,5 @@ echo $completed
 echo $elapsed
 echo $completed >> ${BASE_OUT_DIR}/current
 echo $elapsed >> ${BASE_OUT_DIR}/current
+mv ${BASE_OUT_DIR}/current ${BASE_OUT_DIR}/current0
 exit $ret
