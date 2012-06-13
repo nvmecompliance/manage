@@ -48,22 +48,22 @@ echo "n3" >>${BASE_OUT_DIR}/config
 ../tnvme/tnvme --dump=${BASE_OUT_DIR} -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
 ret=${PIPESTATUS[0]}
 logger_ended=${PIPESTATUS[1]}
-tail --lines=10 ${BASE_OUT_DIR}/current
+tail --lines=11 ${BASE_OUT_DIR}/current
 
 # Cleanup files used to rotate logs, they are just noise
 rm -f ${BASE_OUT_DIR}/lock
 rm -f ${BASE_OUT_DIR}/config
 
-# rename log files to readable format. svlogd names files automatically and
-# adds current timestamp as the name of the file. Changing these files to
-# current0, current1, current2 and current3, where current0 being the latest
-# and current3 being the oldest.
+# Rename log files for ease of understand the history of sequence.svlogd names
+# files automatically and adds current timestamp as the name of the file.
+# Changing these files to log[0..(n-1)] where log0 is recent, log(n-1) is oldest
+mv ${BASE_OUT_DIR}/current ${BASE_OUT_DIR}/log0
 logfiles=( ${BASE_OUT_DIR}/@*.s )
 i=${#logfiles[@]}
 for c in "${logfiles[@]}"
 do
   if [ -f $c ]; then
-    mv $c ${BASE_OUT_DIR}/current$i
+    mv $c ${BASE_OUT_DIR}/log$i
     i=$(($i-1))
   fi
 done
@@ -78,7 +78,6 @@ minutes="$(expr $(expr $remainder - $seconds) / 60)"
 elapsed="Elapsed runtime (hh:mm:ss): $hours:$minutes:$seconds"
 echo $completed
 echo $elapsed
-echo $completed >> ${BASE_OUT_DIR}/current
-echo $elapsed >> ${BASE_OUT_DIR}/current
-mv ${BASE_OUT_DIR}/current ${BASE_OUT_DIR}/current0
+echo $completed >> ${BASE_OUT_DIR}/log0
+echo $elapsed >> ${BASE_OUT_DIR}/log0
 exit $ret
