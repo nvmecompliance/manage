@@ -48,7 +48,7 @@ echo "n3" >>${BASE_OUT_DIR}/config
 ../tnvme/tnvme --dump=${BASE_OUT_DIR} --postfail -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
 ret=${PIPESTATUS[0]}
 logger_ended=${PIPESTATUS[1]}
-tail --lines=11 ${BASE_OUT_DIR}/current
+tail --lines=25 ${BASE_OUT_DIR}/current
 
 # Cleanup files used to rotate logs, they are just noise
 rm -f ${BASE_OUT_DIR}/lock
