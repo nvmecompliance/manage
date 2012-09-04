@@ -45,7 +45,7 @@ echo "n3" >>${BASE_OUT_DIR}/config
 # ./Logs/GrpPending contains the resource dumps of the last group which executed
 # ./Logs/current is the current output from tnvme via stderr/stdout
 # ./Logs/*.s files are the result of svlogd rotating ./${BASE_OUT_DIR}/current
-../tnvme/tnvme --dump=${BASE_OUT_DIR} --postfail -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
+../tnvme/tnvme --dump=${BASE_OUT_DIR} --postfail --rsvdfields -k skiptest.cfg $TNVME_CMD_LINE 2>&1 | svlogd -v -tt -b 2048 -l 0 ${BASE_OUT_DIR}
 ret=${PIPESTATUS[0]}
 logger_ended=${PIPESTATUS[1]}
 tail --lines=25 ${BASE_OUT_DIR}/current
