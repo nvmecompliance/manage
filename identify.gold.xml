@@ -20,13 +20,7 @@
     <cmd>   <!-- Specify mulitple 'cmd' tags as desired                      -->
         <dw1>   <!-- Define DWORD1 values to populate identify admin cmd     -->
             <!-- Any DWORD1 field missing is assumed zero(0).                -->
-            <nsid>0</nsid>     <!-- Must be base 10 -->
-        </dw1>
-        <dw10>  <!-- Define DWORD10 values to populate identify admin cmd    -->
-            <!-- Any DWORD10 field missing is assumed zero(0).               -->
-            <!-- cns=0 implies dw1.nsid field must be non-zero(namspc struct)-->
-            <!-- cns=1 implies dw1.nsid field is reserved and must be zero   -->
-            <cns>1</cns>     <!-- must be boolean {0 | 1} -->
+            <cns>1</cns>     <!-- must be valid cns value (in hex) -->
         </dw10>
         <prp>  <!-- Specify 4KB of raw PRP payload (ASCII hex representation)-->
 86 80 11 01 4E 56 4D 65 51 78 31 30 30 30 00 00
